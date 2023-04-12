@@ -53,3 +53,55 @@ export const TrafficLight: React.FC = () => {
         </div>
     )
 }
+
+// Queueing state with updater funcs
+//EX1) 
+export const RequestTracker: React.FC = () => {
+    const [pending, setPending] = useState(0);
+    const [completed, setCompleted] = useState(0);
+
+    async function handleClick() {
+        setPending(p => p + 1);
+        alert(pending)
+        await delay(3000);
+        setPending(p => p - 1);
+        setCompleted(c => c + 1);
+    }
+
+    return (
+        <>
+            <h3>
+                Pending: {pending}
+            </h3>
+            <h3>
+                Completed: {completed}
+            </h3>
+            <button onClick={handleClick}>
+                Buy
+            </button>
+        </>
+    );
+}
+
+function delay(ms: number) {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms);
+    });
+}
+
+// EX2)
+export const getFinalState = (baseState: number, queue: Array<number | ((n: number) => number)>) => {
+    let finalState = baseState;
+
+    // TODO: do something with the queue...
+    for (let i = 0; i < queue.length; i++) {
+        if (typeof (queue[i]) === "number") finalState = queue[i] as number;
+        else {
+            let f = queue[i] as (n: number) => number;
+            finalState = f(finalState);
+        }
+    }
+
+    return finalState;
+}
+
