@@ -1,15 +1,18 @@
 import { MouseEventHandler } from "react";
 
 interface Iprops {
-    onSmash: () => void; children: string | JSX.Element;
+    onSmash: () => void;
+    children: string | JSX.Element;
 }
 
-
 export const Button: React.FC<Iprops> = ({ onSmash, children }) => {
-    return <div>
-        {children}
-        <button className="h-4 w-4 bg-red-500" onClick={onSmash}>smash out</button>
-    </div>;
+    return (
+        <div>
+            <button className="p-2 rounded-md bg-red-500 text-white text-lg" onClick={onSmash}>
+                {children}
+            </button>
+        </div>
+    );
 };
 
 export const NoPropagationButton: React.FC = () => {
@@ -19,9 +22,13 @@ export const NoPropagationButton: React.FC = () => {
     };
     return (
         <div>
-            <button onClick={(e) => handleClick(e)} value="I am no Propagation button">
-                click button
+            <button
+                onClick={(e) => handleClick(e)}
+                value="I am no Propagation button"
+                className="p-2 rounded-md bg-blue-500 text-white text-lg"
+            >
+                No Propagation
             </button>
         </div>
-    )
+    );
 };
