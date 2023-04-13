@@ -108,7 +108,6 @@ export const getFinalState = (
     return finalState;
 };
 
-
 // Updating Objects
 // EX1)
 export const Scoreboard = () => {
@@ -157,39 +156,33 @@ export const Scoreboard = () => {
 const initialPosition = { x: 0, y: 0 };
 export default function Canvas() {
     const [shape, setShape] = useState({
-        color: 'orange',
-        position: initialPosition
+        color: "orange",
+        position: initialPosition,
     });
 
     function handleMove(dx: number, dy: number) {
-        setShape({ ...shape, position: { x: shape.position.x + dx, y: shape.position.y + dy } })
+        setShape({
+            ...shape,
+            position: { x: shape.position.x + dx, y: shape.position.y + dy },
+        });
     }
 
     function handleColorChange(e: React.ChangeEvent<HTMLSelectElement>) {
         setShape({
             ...shape,
-            color: e.target.value
+            color: e.target.value,
         });
     }
 
     return (
         <>
-            <select
-                value={shape.color}
-                onChange={handleColorChange}
-            >
+            <select value={shape.color} onChange={handleColorChange}>
                 <option value="orange">orange</option>
                 <option value="lightpink">lightpink</option>
                 <option value="aliceblue">aliceblue</option>
             </select>
-            <Background
-                position={initialPosition}
-            />
-            <Box
-                color={shape.color}
-                position={shape.position}
-                onMove={handleMove}
-            >
+            <Background position={initialPosition} />
+            <Box color={shape.color} position={shape.position} onMove={handleMove}>
                 Drag me!
             </Box>
         </>
@@ -199,51 +192,72 @@ export default function Canvas() {
 // Updating arrays
 // EX1) arrays of objects
 
-const initialProducts = [{
-    id: 0,
-    name: 'Baklava',
-    count: 1,
-}, {
-    id: 1,
-    name: 'Cheese',
-    count: 5,
-}, {
-    id: 2,
-    name: 'Spaghetti',
-    count: 2,
-}];
+const initialProducts = [
+    {
+        id: 0,
+        name: "Baklava",
+        count: 1,
+    },
+    {
+        id: 1,
+        name: "Cheese",
+        count: 5,
+    },
+    {
+        id: 2,
+        name: "Spaghetti",
+        count: 2,
+    },
+];
 
 export const ShoppingCart = () => {
-    const [
-        products,
-        setProducts
-    ] = useState(initialProducts)
+    const [products, setProducts] = useState(initialProducts);
 
     function handleIncreaseClick(productId: number) {
         const newProds = [...products];
 
-        setProducts(newProds.map((prod) => {
-            if (prod.id === productId) {
-                return { ...prod, count: prod.count + 1 };
-            }
-            else return prod;
-        }));
+        setProducts(
+            newProds.map((prod) => {
+                if (prod.id === productId) {
+                    return { ...prod, count: prod.count + 1 };
+                } else return prod;
+            })
+        );
+    }
+    function handleDecreaseClick(productId: number, cnt: number) {
+        if (cnt === 1) {
+            setProducts(products.filter((product) => product.id !== productId));
+        } else {
+            setProducts(
+                products.map((product) => {
+                    if (product.id === productId) {
+                        return { ...product, count: product.count - 1 };
+                    } else return product;
+                })
+            );
+        }
     }
 
     return (
         <ul>
-            {products.map(product => (
+            {products.map((product) => (
                 <li key={product.id}>
-                    {product.name}
-                    {' '}
-                    (<b>{product.count}</b>)
-                    <button onClick={() => {
-                        handleIncreaseClick(product.id);
-                    }}>
-                        +
+                    {product.name} (<b>{product.count}</b>)
+                    <button
+                        onClick={() => {
+                            handleIncreaseClick(product.id);
+                        }}
+                    >
+                        {" "}
+                        +{" "}
+                    </button>
+                    <button
+                        onClick={() => handleDecreaseClick(product.id, product.count)}
+                    >
+                        -
                     </button>
                 </li>
             ))}
         </ul>
     );
-}
+};
