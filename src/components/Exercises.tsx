@@ -195,3 +195,55 @@ export default function Canvas() {
         </>
     );
 }
+
+// Updating arrays
+// EX1) arrays of objects
+
+const initialProducts = [{
+    id: 0,
+    name: 'Baklava',
+    count: 1,
+}, {
+    id: 1,
+    name: 'Cheese',
+    count: 5,
+}, {
+    id: 2,
+    name: 'Spaghetti',
+    count: 2,
+}];
+
+export const ShoppingCart = () => {
+    const [
+        products,
+        setProducts
+    ] = useState(initialProducts)
+
+    function handleIncreaseClick(productId: number) {
+        const newProds = [...products];
+
+        setProducts(newProds.map((prod) => {
+            if (prod.id === productId) {
+                return { ...prod, count: prod.count + 1 };
+            }
+            else return prod;
+        }));
+    }
+
+    return (
+        <ul>
+            {products.map(product => (
+                <li key={product.id}>
+                    {product.name}
+                    {' '}
+                    (<b>{product.count}</b>)
+                    <button onClick={() => {
+                        handleIncreaseClick(product.id);
+                    }}>
+                        +
+                    </button>
+                </li>
+            ))}
+        </ul>
+    );
+}
