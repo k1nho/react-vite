@@ -1,5 +1,6 @@
 import { Button, NoPropagationButton } from "./components/Button";
 import { LightSwitch } from "./components/Exercises";
+import { Todos } from "./components/Todos"
 
 function App() {
     return (
@@ -10,6 +11,9 @@ function App() {
             </div>
             <div className="flex">
                 <LightSwitch />
+            </div>
+            <div>
+                <Todos />
             </div>
         </div>
     );
