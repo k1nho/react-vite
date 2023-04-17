@@ -261,3 +261,52 @@ export const ShoppingCart = () => {
         </ul>
     );
 };
+
+// Reacting to input state
+// EX1)
+export const Picture = () => {
+    const [bgActive, setBgActive] = useState(true)
+    return (
+        <div className={`background ${bgActive && "background--active"}`} onClick={() => setBgActive(true)}>
+            <img
+                className={`picture ${!bgActive && "picture--active"}`}
+                onClick={(e) => { e.stopPropagation(); setBgActive(false) }}
+                alt="Rainbow houses in Kampung Pelangi, Indonesia"
+                src="https://i.imgur.com/5qwVYb1.jpeg"
+            />
+        </div>
+    );
+}
+//EX2)
+export const EditProfile = () => {
+    const [firstName, setFirstName] = useState("Jane")
+    const [lastName, setLastName] = useState("Jacobs")
+    const [editMode, setEditMode] = useState(false)
+
+    const handleSubmit = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
+        e.preventDefault();
+        setEditMode(!editMode)
+    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <label>
+                First name:{' '}
+                {editMode ?
+                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} /> :
+                    <b>{firstName}</b>
+                }
+            </label>
+            <label>
+                Last name:{' '}
+                {editMode ?
+                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                    : <b>{lastName}</b>
+                }
+            </label>
+            <button type="submit">
+                {editMode ? 'Save Profile' : 'Edit Profile'}
+            </button>
+            <p><i>Hello, {firstName + " " + lastName}!</i></p>
+        </form>
+    );
+}
