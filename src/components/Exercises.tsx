@@ -513,3 +513,77 @@ function List({ items }: { items: Item[] }) {
         </table>
     );
 }
+
+// Preserving and Resetting state
+// EX1) The hint problem
+export const HintApp = () => {
+    const [showHint, setShowHint] = useState(false);
+
+    return (
+        <div>
+            {showHint && <p><i>Hint: Your favorite city?</i></p>}
+            <Form />
+            <button onClick={() => {
+                setShowHint(!showHint);
+            }}>{showHint ? "Hide hint" : "Show Hint"}</button>
+        </div>
+    );
+}
+
+function Form() {
+    const [text, setText] = useState('');
+    return (
+        <textarea
+            value={text}
+            onChange={e => setText(e.target.value)}
+        />
+    );
+}
+
+// EX2) The reverse problem
+
+export const ReverseApp = () => {
+    const [reverse, setReverse] = useState(false);
+    let checkbox = (
+        <label>
+            <input
+                type="checkbox"
+                checked={reverse}
+                onChange={e => setReverse(e.target.checked)}
+            />
+            Reverse order
+        </label>
+    );
+    if (reverse) {
+        return (
+            <>
+                <Field key="last" label="Last name" />
+                <Field key="first" label="First name" />
+                {checkbox}
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Field key="first" label="First name" />
+                <Field key="last" label="Last name" />
+                {checkbox}
+            </>
+        );
+    }
+}
+
+function Field({ label }: { label: string }) {
+    const [text, setText] = useState('');
+    return (
+        <label>
+            {label}:{' '}
+            <input
+                type="text"
+                value={text}
+                placeholder={label}
+                onChange={e => setText(e.target.value)}
+            />
+        </label>
+    );
+}
