@@ -439,3 +439,77 @@ function Input({
         </label>
     );
 }
+
+interface Item {
+    id: number,
+    name: string,
+    description: string
+}
+
+// Ex2)
+const filterItems = (items: Item[], query: string): Item[] => {
+    query = query.toLowerCase();
+    return items.filter(item =>
+        item.name.split(' ').some(word =>
+            word.toLowerCase().startsWith(query)
+        )
+    );
+}
+
+const foods = [
+    {
+        id: 0,
+        name: "pizza",
+        description: "its a pizza"
+    },
+    {
+        id: 1,
+        name: "lobster",
+        description: "its a lobster"
+    }
+]
+
+
+export const FilterableList = () => {
+    const [query, setQuery] = useState('');
+    let items = filterItems(foods, query)
+    return (
+        <>
+            <SearchBar query={query} onQueryChange={setQuery} />
+            <hr />
+            <List items={items} />
+        </>
+    );
+}
+
+function SearchBar({ query, onQueryChange }: { query: string, onQueryChange: React.Dispatch<React.SetStateAction<string>> }) {
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        onQueryChange(e.target.value);
+    }
+
+    return (
+        <label>
+            Search:{' '}
+            <input
+                value={query}
+                onChange={handleChange}
+            />
+        </label>
+    );
+}
+
+function List({ items }: { items: Item[] }) {
+    return (
+        <table>
+            <tbody>
+                {items.map(food => (
+                    <tr key={food.id}>
+                        <td>{food.name}</td>
+                        <td>{food.description}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
