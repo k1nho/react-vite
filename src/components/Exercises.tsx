@@ -265,76 +265,95 @@ export const ShoppingCart = () => {
 // Reacting to input state
 // EX1)
 export const Picture = () => {
-    const [bgActive, setBgActive] = useState(true)
+    const [bgActive, setBgActive] = useState(true);
     return (
-        <div className={`background ${bgActive && "background--active"}`} onClick={() => setBgActive(true)}>
+        <div
+            className={`background ${bgActive && "background--active"}`}
+            onClick={() => setBgActive(true)}
+        >
             <img
                 className={`picture ${!bgActive && "picture--active"}`}
-                onClick={(e) => { e.stopPropagation(); setBgActive(false) }}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setBgActive(false);
+                }}
                 alt="Rainbow houses in Kampung Pelangi, Indonesia"
                 src="https://i.imgur.com/5qwVYb1.jpeg"
             />
         </div>
     );
-}
+};
 //EX2)
 export const EditProfile = () => {
-    const [firstName, setFirstName] = useState("Jane")
-    const [lastName, setLastName] = useState("Jacobs")
-    const [editMode, setEditMode] = useState(false)
+    const [firstName, setFirstName] = useState("Jane");
+    const [lastName, setLastName] = useState("Jacobs");
+    const [editMode, setEditMode] = useState(false);
 
     const handleSubmit = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
         e.preventDefault();
-        setEditMode(!editMode)
-    }
+        setEditMode(!editMode);
+    };
     return (
         <form onSubmit={handleSubmit}>
             <label>
-                First name:{' '}
-                {editMode ?
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} /> :
+                First name:{" "}
+                {editMode ? (
+                    <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                ) : (
                     <b>{firstName}</b>
-                }
+                )}
             </label>
             <label>
-                Last name:{' '}
-                {editMode ?
-                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    : <b>{lastName}</b>
-                }
+                Last name:{" "}
+                {editMode ? (
+                    <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+                ) : (
+                    <b>{lastName}</b>
+                )}
             </label>
             <button type="submit">
-                {editMode ? 'Save Profile' : 'Edit Profile'}
+                {editMode ? "Save Profile" : "Edit Profile"}
             </button>
-            <p><i>Hello, {firstName + " " + lastName}!</i></p>
+            <p>
+                <i>Hello, {firstName + " " + lastName}!</i>
+            </p>
         </form>
     );
-}
-
+};
 
 // Choosing the state structure
 // EX4)
-const letters = [{
-    id: 0,
-    subject: 'Ready for adventure?',
-    isStarred: true,
-}, {
-    id: 1,
-    subject: 'Time to check in!',
-    isStarred: false,
-}, {
-    id: 2,
-    subject: 'Festival Begins in Just SEVEN Days!',
-    isStarred: false,
-}];
-
+const letters = [
+    {
+        id: 0,
+        subject: "Ready for adventure?",
+        isStarred: true,
+    },
+    {
+        id: 1,
+        subject: "Time to check in!",
+        isStarred: false,
+    },
+    {
+        id: 2,
+        subject: "Festival Begins in Just SEVEN Days!",
+        isStarred: false,
+    },
+];
 
 interface Letter {
-    letter: { id: number, subject: string, isStarred: boolean },
+    letter: { id: number; subject: string; isStarred: boolean };
     onToggle: (id: number) => void;
-    isSelected: boolean
+    isSelected: boolean;
 }
-
 
 export const MailClient = () => {
     const [ids, setIds] = useState<number[]>([]);
@@ -343,15 +362,15 @@ export const MailClient = () => {
     const selectedCount = ids.length;
 
     function handleToggle(toggledId: number) {
-        if (!ids.includes(toggledId)) setIds([...ids, toggledId])
-        else setIds(ids.filter((id) => id !== toggledId))
+        if (!ids.includes(toggledId)) setIds([...ids, toggledId]);
+        else setIds(ids.filter((id) => id !== toggledId));
     }
 
     return (
         <>
             <h2>Inbox</h2>
             <ul>
-                {letters.map(letter => (
+                {letters.map((letter) => (
                     <Letter
                         key={letter.id}
                         letter={letter}
@@ -364,22 +383,17 @@ export const MailClient = () => {
                 ))}
                 <hr />
                 <p>
-                    <b>
-                        You selected {selectedCount} letters
-                    </b>
+                    <b>You selected {selectedCount} letters</b>
                 </p>
             </ul>
         </>
     );
-}
-
+};
 
 export const Letter: React.FC<Letter> = ({ letter, onToggle, isSelected }) => {
     {
         return (
-            <li className={
-                isSelected ? 'selected' : ''
-            }>
+            <li className={isSelected ? "selected" : ""}>
                 <label>
                     <input
                         type="checkbox"
@@ -391,6 +405,37 @@ export const Letter: React.FC<Letter> = ({ letter, onToggle, isSelected }) => {
                     {letter.subject}
                 </label>
             </li>
-        )
+        );
     }
+};
+
+// Sharing State Between Components
+// Ex1)
+export const SyncedInputs = () => {
+    const [text, setText] = useState("");
+    return (
+        <>
+            <Input label="First input" text={text} onTextChange={setText} />
+            <Input label="Second input" text={text} onTextChange={setText} />
+        </>
+    );
+};
+
+function Input({
+    label,
+    text,
+    onTextChange,
+}: {
+    label: string;
+    text: string;
+    onTextChange: React.Dispatch<React.SetStateAction<string>>;
+}) {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        onTextChange(e.target.value);
+    }
+    return (
+        <label>
+            {label} <input value={text} onChange={handleChange} />
+        </label>
+    );
 }
